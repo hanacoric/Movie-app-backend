@@ -5,6 +5,7 @@ import userRoutes from "./routes/userRoutes";
 import userProtectedRoutes from "./routes/userProtectedRoutes";
 import movieListRoutes from "./routes/movieListRoutes";
 import reviewRoutes from "./routes/reviewRoutes";
+import searchRoutes from "./routes/searchRoutes";
 
 dotenv.config();
 
@@ -21,4 +22,5 @@ app.use("/api/users", userRoutes);
 app.use("/api/users", userProtectedRoutes);
 app.use("/api/movies", movieListRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/search", searchRoutes);
 export default app;
