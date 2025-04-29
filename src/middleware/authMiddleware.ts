@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
 import User, { IUserDocument } from "../models/User";
 
 export interface AuthRequest extends Request {
@@ -15,7 +15,7 @@ export const protect = async (
 
   if (
     req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
+    req.headers.authorization.startsWith("Bearer ")
   ) {
     try {
       token = req.headers.authorization.split(" ")[1];
@@ -32,6 +32,7 @@ export const protect = async (
       }
 
       req.user = user;
+
       next();
     } catch (error) {
       console.error(error);
