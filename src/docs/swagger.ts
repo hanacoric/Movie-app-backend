@@ -6,7 +6,7 @@ const options: swaggerJSDoc.Options = {
     info: {
       title: "Movie App REST API",
       version: "1.0.0",
-      description: "API documentation for your fullstack movie app",
+      description: "API documentation for the movie app",
     },
     servers: [
       {
