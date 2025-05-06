@@ -15,7 +15,10 @@ const app = express();
 
 app.use(
   cors({
-    origin: true,
+    origin: [
+      "http://localhost:5175", // your frontend during dev
+      "https://movie-app-backend-ujpg.onrender.com", // for Swagger UI
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
