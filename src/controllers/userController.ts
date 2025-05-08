@@ -50,14 +50,20 @@ export const registerUser: RequestHandler = async (req, res) => {
 // @desc    Authenticate a user and get token
 // @route   POST /api/users/login
 export const loginUser: RequestHandler = async (req, res) => {
-  const { email, password } = req.body;
-  const { recaptchaToken } = req.body;
+  console.log("🧪 Login request body:", req.body);
+
+  const { email, password, recaptchaToken } = req.body;
 
   const isHuman = await verifyRecaptcha(recaptchaToken);
+  console.log("🤖 reCAPTCHA valid:", isHuman);
+
   if (!isHuman) {
     res.status(403).json({ message: "reCAPTCHA failed. Please try again." });
     return;
   }
+
+  const user = await User.findOne({ email });
+  console.log("👤 User found:", user?.email || "none");
 
   try {
     const user = await User.findOne({ email });
