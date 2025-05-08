@@ -6,7 +6,8 @@ export const searchMovies = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { query, page = 1 } = req.query;
+  const query = req.query.query as string;
+  const page = parseInt(req.query.page as string) || 1;
 
   if (!query) {
     res.status(400).json({ message: "No search query provided" });
