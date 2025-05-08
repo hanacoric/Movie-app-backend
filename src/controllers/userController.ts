@@ -54,6 +54,9 @@ export const loginUser: RequestHandler = async (req, res) => {
 
   const { email, password, recaptchaToken } = req.body;
 
+  console.log("🧠 Token received:", recaptchaToken);
+  console.log("🧠 Token length:", recaptchaToken?.length);
+
   const isHuman = await verifyRecaptcha(recaptchaToken);
   console.log("🤖 reCAPTCHA valid:", isHuman);
 
@@ -62,11 +65,9 @@ export const loginUser: RequestHandler = async (req, res) => {
     return;
   }
 
-  const user = await User.findOne({ email });
-  console.log("👤 User found:", user?.email || "none");
-
   try {
     const user = await User.findOne({ email });
+    console.log("👤 User found:", user?.email || "none");
 
     if (user && (await matchPassword(password, user.password))) {
       res.json({
@@ -79,6 +80,7 @@ export const loginUser: RequestHandler = async (req, res) => {
       res.status(401).json({ message: "Invalid email or password" });
     }
   } catch (error) {
+    console.error("❌ Server error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
