@@ -2,12 +2,20 @@ import User, { IUserDocument } from "../models/User";
 import { generateToken } from "../utils/generateToken";
 import { hashPassword, matchPassword } from "../utils/hashedPassword";
 import { RequestHandler } from "express";
+import { verifyRecaptcha } from "../utils/verifyRecaptcha";
 
 // @desc    Register a new user
 // @route   POST /api/users/register
 
 export const registerUser: RequestHandler = async (req, res) => {
   const { username, email, password } = req.body;
+  const { recaptchaToken } = req.body;
+
+  const isHuman = await verifyRecaptcha(recaptchaToken);
+  if (!isHuman) {
+    res.status(403).json({ message: "reCAPTCHA failed. Please try again." });
+    return;
+  }
 
   try {
     const userExists = (await User.findOne({ email })) as IUserDocument;
@@ -43,6 +51,13 @@ export const registerUser: RequestHandler = async (req, res) => {
 // @route   POST /api/users/login
 export const loginUser: RequestHandler = async (req, res) => {
   const { email, password } = req.body;
+  const { recaptchaToken } = req.body;
+
+  const isHuman = await verifyRecaptcha(recaptchaToken);
+  if (!isHuman) {
+    res.status(403).json({ message: "reCAPTCHA failed. Please try again." });
+    return;
+  }
 
   try {
     const user = await User.findOne({ email });
