@@ -13,6 +13,8 @@ export const searchMovies = async (
     res.status(400).json({ message: "No search query provided" });
     return;
   }
+  console.log("OMDb API Key:", process.env.OMDB_API_KEY);
+  console.log("Search query:", query, "Page:", page);
 
   try {
     const omdbResponse = await axios.get<OMDbSearchResponse>(
