@@ -30,7 +30,7 @@ export const searchMovies = async (
       return;
     }
 
-    res.json(omdbResponse.data.Search);
+    res.json(omdbResponse.data);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
