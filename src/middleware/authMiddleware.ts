@@ -6,6 +6,10 @@ export interface AuthRequest extends Request {
   user?: IUserDocument;
 }
 
+interface JwtPayload {
+  _id: string;
+}
+
 export const protect = async (
   req: AuthRequest,
   res: Response,
@@ -20,11 +24,9 @@ export const protect = async (
     try {
       token = req.headers.authorization.split(" ")[1];
 
-      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
-        id: string;
-      };
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
 
-      const user = await User.findById(decoded.id).select("-password");
+      const user = await User.findById(decoded._id).select("-password");
 
       if (!user) {
         res.status(401).json({ message: "User not found" });
@@ -32,15 +34,12 @@ export const protect = async (
       }
 
       req.user = user;
-
       next();
     } catch (error) {
       console.error(error);
       res.status(401).json({ message: "Not authorized, token failed" });
-      return;
     }
   } else {
     res.status(401).json({ message: "Not authorized, no token" });
-    return;
   }
 };
