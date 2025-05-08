@@ -6,7 +6,7 @@ export const searchMovies = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { query } = req.query;
+  const { query, page } = req.query;
 
   if (!query) {
     res.status(400).json({ message: "No search query provided" });
@@ -20,6 +20,7 @@ export const searchMovies = async (
         params: {
           apikey: process.env.OMDB_API_KEY,
           s: query,
+          page,
         },
       }
     );
