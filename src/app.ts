@@ -6,6 +6,7 @@ import userProtectedRoutes from "./routes/userProtectedRoutes";
 import movieListRoutes from "./routes/movieListRoutes";
 import reviewRoutes from "./routes/reviewRoutes";
 import searchRoutes from "./routes/searchRoutes";
+import movieRoutes from "./routes/movieRoutes";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./docs/swagger";
 
@@ -36,6 +37,7 @@ app.use("/api/users", userProtectedRoutes);
 app.use("/api/movies", movieListRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/search", searchRoutes);
+app.use("/api", movieRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 export default app;

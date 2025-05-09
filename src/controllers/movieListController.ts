@@ -51,5 +51,5 @@ export const removeFromMovieList = async (
 
   await user.save();
 
-  res.status(200).json({ message: `Removed from ${listName}` });
+  res.status(200).json({ message: `Added to ${listName}` });
 };
