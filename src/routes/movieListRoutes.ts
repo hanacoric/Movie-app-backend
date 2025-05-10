@@ -69,7 +69,7 @@ import {
 
 const router = express.Router();
 
-router.post("/add", protect, addToMovieList);
-router.post("/remove", protect, removeFromMovieList);
+router.put("/add", protect, addToMovieList);
+router.put("/remove", protect, removeFromMovieList);
 
 export default router;
