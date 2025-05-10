@@ -3,6 +3,8 @@ import { generateToken } from "../utils/generateToken";
 import { hashPassword, matchPassword } from "../utils/hashedPassword";
 import { RequestHandler } from "express";
 import { verifyRecaptcha } from "../utils/verifyRecaptcha";
+import { AuthRequest } from "../middleware/authMiddleware";
+import { Request, Response } from "express";
 
 // @desc    Register a new user
 // @route   POST /api/users/register
@@ -73,7 +75,21 @@ export const loginUser: RequestHandler = async (req, res) => {
       res.status(401).json({ message: "Invalid email or password" });
     }
   } catch (error) {
-    console.error("❌ Server error:", error);
+    console.error("Server error:", error);
     res.status(500).json({ message: "Server error" });
   }
+};
+
+export const getUserLists = async (req: AuthRequest, res: Response) => {
+  const user = req.user;
+
+  if (!user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  res.status(200).json({
+    watchedMovies: user.watchedMovies || [],
+    watchlist: user.watchlist || [],
+    favoriteMovies: user.favoriteMovies || [],
+  });
 };
