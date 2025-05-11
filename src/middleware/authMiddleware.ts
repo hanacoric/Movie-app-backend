@@ -19,28 +19,23 @@ export const protect = async (
   ) {
     try {
       token = req.headers.authorization.split(" ")[1];
-
-      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
-        id: string;
-      };
+      const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
 
       const user = await User.findById(decoded.id).select("-password");
-
       if (!user) {
         res.status(401).json({ message: "User not found" });
         return;
       }
 
       req.user = user;
-
       next();
+      return;
     } catch (error) {
-      console.error(error);
       res.status(401).json({ message: "Not authorized, token failed" });
       return;
     }
-  } else {
-    res.status(401).json({ message: "Not authorized, no token" });
-    return;
   }
+
+  res.status(401).json({ message: "Not authorized, no token" });
+  return;
 };

@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes";
 import userProtectedRoutes from "./routes/userProtectedRoutes";
 import movieListRoutes from "./routes/movieListRoutes";
@@ -9,8 +8,10 @@ import searchRoutes from "./routes/searchRoutes";
 import movieRoutes from "./routes/movieRoutes";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./docs/swagger";
+import path from "path";
+import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const app = express();
 

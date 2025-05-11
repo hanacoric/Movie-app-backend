@@ -5,6 +5,7 @@ import { RequestHandler } from "express";
 import { verifyRecaptcha } from "../utils/verifyRecaptcha";
 import { AuthRequest } from "../middleware/authMiddleware";
 import { Request, Response } from "express";
+import axios from "axios";
 
 // @desc    Register a new user
 // @route   POST /api/users/register
@@ -80,16 +81,84 @@ export const loginUser: RequestHandler = async (req, res) => {
   }
 };
 
-export const getUserLists = async (req: AuthRequest, res: Response) => {
-  const user = req.user;
-
-  if (!user) {
-    return res.status(401).json({ message: "Unauthorized" });
+export const getUserLists = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  if (!req.user?.id) {
+    console.error("❌ No user ID found in request.");
+    res.status(401).json({ message: "Unauthorized" });
+    return;
   }
 
-  res.status(200).json({
-    watchedMovies: user.watchedMovies || [],
-    watchlist: user.watchlist || [],
-    favoriteMovies: user.favoriteMovies || [],
-  });
+  console.log("👤 Fetching user from DB with ID:", req.user.id);
+  const userFromDB = await User.findById(req.user.id);
+
+  if (!userFromDB) {
+    console.error("❌ User not found in DB.");
+    res.status(404).json({ message: "User not found" });
+    return;
+  }
+
+  try {
+    const fetchOMDbData = async (imdbID: string) => {
+      try {
+        const response = await axios.get<{
+          Response: string;
+          Error?: string;
+          imdbID: string;
+          Title: string;
+          Year: string;
+          Poster: string;
+        }>(`https://www.omdbapi.com/`, {
+          params: {
+            apikey: process.env.OMDB_API_KEY,
+            i: imdbID,
+          },
+        });
+
+        const data = response.data;
+
+        if (data.Response === "False") {
+          console.warn(`⚠️ OMDb Error: ${data.Error} (ID: ${imdbID})`);
+          return null;
+        }
+
+        return {
+          imdbID: data.imdbID,
+          title: data.Title,
+          year: data.Year,
+          poster: data.Poster,
+        };
+      } catch (err) {
+        console.error(`❌ OMDb fetch failed for ${imdbID}`, err);
+        return null;
+      }
+    };
+
+    console.log("📦 Fetching movie details for lists...");
+
+    const watchedMovies = (
+      await Promise.all(userFromDB.watchedMovies.map(fetchOMDbData))
+    ).filter(Boolean);
+    const watchlist = (
+      await Promise.all(userFromDB.watchlist.map(fetchOMDbData))
+    ).filter(Boolean);
+    const favoriteMovies = (
+      await Promise.all(userFromDB.favoriteMovies.map(fetchOMDbData))
+    ).filter(Boolean);
+
+    console.log("✅ Successfully fetched all lists.");
+
+    res.status(200).json({
+      watchedMovies,
+      watchlist,
+      favoriteMovies,
+    });
+    return;
+  } catch (error) {
+    console.error("🔥 Server error in getUserLists:", error);
+    res.status(500).json({ message: "Server error", error });
+    return;
+  }
 };

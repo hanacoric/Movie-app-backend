@@ -1,13 +1,16 @@
-import express from "express";
-import { protect } from "../middleware/authMiddleware";
-import { AuthRequest } from "../middleware/authMiddleware";
+import express, { Request, Response } from "express";
+import { protect, AuthRequest } from "../middleware/authMiddleware";
 import { getUserLists } from "../controllers/userController";
+import { asyncHandler } from "../utils/asyncHandler";
+
+const router = express.Router();
 
 /**
  * @swagger
  * /api/users/profile:
  *   get:
  *     summary: Get current user profile
+ *     tags: [Users]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -15,7 +18,14 @@ import { getUserLists } from "../controllers/userController";
  *         description: User profile data
  *       401:
  *         description: Unauthorized
-  /api/users/lists:
+ */
+router.get("/profile", protect, (req: AuthRequest, res: Response) => {
+  res.json(req.user);
+});
+
+/**
+ * @swagger
+ * /api/users/lists:
  *   get:
  *     summary: Get all movie lists for the authenticated user
  *     tags: [Users]
@@ -44,14 +54,12 @@ import { getUserLists } from "../controllers/userController";
  *       401:
  *         description: Unauthorized, missing or invalid token
  */
-
-const router = express.Router();
-
-router.get("/profile", protect, (req: AuthRequest, res) => {
-  res.json(req.user);
-});
-router.get("/lists", protect, (req, res, next) => {
-  getUserLists(req, res).catch(next);
-});
+router.get(
+  "/lists",
+  protect,
+  asyncHandler(async (req: Request, res: Response) => {
+    await getUserLists(req as AuthRequest, res);
+  })
+);
 
 export default router;
