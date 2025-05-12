@@ -67,3 +67,51 @@ export const deleteReview = async (
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// Update a review
+export const updateReview = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  const { id } = req.params;
+  const { reviewText, rating } = req.body;
+  const userId = req.user?._id;
+
+  try {
+    const review = await Review.findById(id);
+
+    if (!review) {
+      res.status(404).json({ message: "Review not found" });
+      return;
+    }
+
+    if (review.userId.toString() !== userId?.toString()) {
+      res.status(401).json({ message: "Not authorized" });
+      return;
+    }
+
+    review.reviewText = reviewText;
+    review.rating = rating;
+    await review.save();
+
+    res.status(200).json(review);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Get current users review for a movie
+export const getUserReviewForMovie = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  const userId = req.user?._id;
+  const { movieId } = req.params;
+
+  try {
+    const review = await Review.findOne({ userId, movieId });
+    res.status(200).json(review);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};

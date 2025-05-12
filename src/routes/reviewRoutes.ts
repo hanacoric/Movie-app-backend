@@ -4,9 +4,12 @@ import {
   createReview,
   getReviewsByMovie,
   deleteReview,
+  updateReview,
+  getUserReviewForMovie,
 } from "../controllers/reviewController";
 
-/** SWAGGER for POST /api/reviews **/
+const router = express.Router();
+
 /**
  * @swagger
  * /api/reviews:
@@ -40,8 +43,8 @@ import {
  *       500:
  *         description: Server error
  */
+router.post("/", protect, createReview);
 
-/** SWAGGER for GET /api/reviews/{movieId} **/
 /**
  * @swagger
  * /api/reviews/{movieId}:
@@ -59,8 +62,8 @@ import {
  *       500:
  *         description: Server error
  */
+router.get("/:movieId", getReviewsByMovie);
 
-/** SWAGGER for DELETE /api/reviews/{id} **/
 /**
  * @swagger
  * /api/reviews/{id}:
@@ -82,13 +85,61 @@ import {
  *       404:
  *         description: Review not found
  */
+router.delete("/:id", protect, deleteReview);
 
-const router = express.Router();
+/**
+ * @swagger
+ * /api/reviews/{id}:
+ *   put:
+ *     summary: Update a review
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               reviewText:
+ *                 type: string
+ *               rating:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Review updated
+ *       401:
+ *         description: Not authorized
+ *       404:
+ *         description: Review not found
+ */
+router.put("/:id", protect, updateReview);
 
-router.post("/", protect, createReview); // Create a new review
-
-router.get("/:movieId", getReviewsByMovie); // Get all reviews for a movie
-
-router.delete("/:id", protect, deleteReview); // Delete a review
+/**
+ * @swagger
+ * /api/reviews/user/{movieId}:
+ *   get:
+ *     summary: Get a user's review for a movie
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: movieId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User's review
+ *       500:
+ *         description: Server error
+ */
+router.get("/user/:movieId", protect, getUserReviewForMovie);
 
 export default router;
