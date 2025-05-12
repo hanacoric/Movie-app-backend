@@ -115,3 +115,19 @@ export const getUserReviewForMovie = async (
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// Get all reviews by a user
+
+export const getAllReviewsByUser = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  const userId = req.user?._id;
+
+  try {
+    const reviews = await Review.find({ userId });
+    res.status(200).json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
