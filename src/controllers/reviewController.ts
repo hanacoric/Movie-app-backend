@@ -33,7 +33,11 @@ export const getReviewsByMovie = async (
   const { movieId } = req.params;
 
   try {
-    const reviews = await Review.find({ movieId });
+    const reviews = await Review.find({ movieId }).populate(
+      "userId",
+      "username"
+    );
+
     res.status(200).json(reviews);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
