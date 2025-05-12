@@ -48,6 +48,69 @@ router.post("/", protect, createReview);
 
 /**
  * @swagger
+ * /api/reviews/user:
+ *   get:
+ *     summary: Get all reviews by the current logged-in user
+ *     tags:
+ *       - Reviews
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of user's reviews
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   title:
+ *                     type: string
+ *                   reviewText:
+ *                     type: string
+ *                   rating:
+ *                     type: number
+ *                   movieId:
+ *                     type: string
+ *                   userId:
+ *                     type: string
+ *                   createdAt:
+ *                     type: string
+ *                   updatedAt:
+ *                     type: string
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
+router.get("/user", protect, getAllReviewsByUser);
+
+/**
+ * @swagger
+ * /api/reviews/user/{movieId}:
+ *   get:
+ *     summary: Get a user's review for a movie
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: movieId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User's review
+ *       500:
+ *         description: Server error
+ */
+router.get("/user/:movieId", protect, getUserReviewForMovie);
+
+/**
+ * @swagger
  * /api/reviews/{movieId}:
  *   get:
  *     summary: Get all reviews for a movie
@@ -122,66 +185,4 @@ router.delete("/:id", protect, deleteReview);
  */
 router.put("/:id", protect, updateReview);
 
-/**
- * @swagger
- * /api/reviews/user/{movieId}:
- *   get:
- *     summary: Get a user's review for a movie
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: movieId
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: User's review
- *       500:
- *         description: Server error
- */
-router.get("/user/:movieId", protect, getUserReviewForMovie);
-
-router.get("/user", protect, getAllReviewsByUser);
-/**
- * @swagger
- * /api/reviews/user:
- *   get:
- *     summary: Get all reviews by the current logged-in user
- *     tags:
- *       - Reviews
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: List of user's reviews
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   _id:
- *                     type: string
- *                   title:
- *                     type: string
- *                   reviewText:
- *                     type: string
- *                   rating:
- *                     type: number
- *                   movieId:
- *                     type: string
- *                   userId:
- *                     type: string
- *                   createdAt:
- *                     type: string
- *                   updatedAt:
- *                     type: string
- *       401:
- *         description: Unauthorized
- *       500:
- *         description: Server error
- */
 export default router;
