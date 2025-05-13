@@ -37,12 +37,12 @@ npm install
 
 3. **Environment setup**
 
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-VITE_RECAPTCHA_SECRET_KEY=your_recaptcha_secret_key
-OMDB_API_KEY=your_omdb_api_key
-SKIP_RECAPTCHA=true
+PORT=5000 <br>
+MONGO_URI=your_mongodb_connection_string <br>
+JWT_SECRET=your_jwt_secret <br>
+VITE_RECAPTCHA_SECRET_KEY=your_recaptcha_secret_key <br>
+OMDB_API_KEY=your_omdb_api_key <br>
+SKIP_RECAPTCHA=true <br>
 
 4. **Start the server**
 
@@ -50,21 +50,21 @@ npm run dev
 
 ## Folder Structure
 
-movie-app-backend/
-│
-├── src/
-│ ├── config/ # DB & environment setup
-│ ├── controllers/ # Route logic
-│ ├── docs/ # Swagger config
-│ ├── middleware/ # Auth middleware
-│ ├── models/ # Mongoose schemas
-│ ├── routes/ # Express route definitions
-│ ├── types/ # OMDb response interfaces
-│ ├── utils/ # Helper functions
-│ ├── app.ts # Express app setup
-│ └── server.ts # Entry point
-│
-├── .env # Environment variables
-├── README.md
-├── package.json
-├── tsconfig.json
+movie-app-backend/<br>
+│<br>
+├── src/<br>
+│ ├── config/ # DB & environment setup<br>
+│ ├── controllers/ # Route logic<br>
+│ ├── docs/ # Swagger config<br>
+│ ├── middleware/ # Auth middleware<br>
+│ ├── models/ # Mongoose schemas<br>
+│ ├── routes/ # Express route definitions <br>
+│ ├── types/ # OMDb response interfaces<br>
+│ ├── utils/ # Helper functions<br>
+│ ├── app.ts # Express app setup<br>
+│ └── server.ts # Entry point<br>
+│<br>
+├── .env # Environment variables<br>
+├── README.md<br>
+├── package.json<br>
+├── tsconfig.json<br>
