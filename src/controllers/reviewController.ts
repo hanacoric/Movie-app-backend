@@ -33,10 +33,9 @@ export const getReviewsByMovie = async (
   const { movieId } = req.params;
 
   try {
-    const reviews = await Review.find({ movieId }).populate(
-      "userId",
-      "username"
-    );
+    const reviews = await Review.find({ movieId: req.params.movieId })
+      .populate("userId", "username")
+      .exec();
 
     res.status(200).json(reviews);
   } catch (error) {
