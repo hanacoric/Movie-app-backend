@@ -3,6 +3,11 @@ import { AuthRequest } from "../middleware/authMiddleware";
 import User from "../models/User";
 import Review from "../models/Review";
 
+type MovieListName = "watchlist" | "favoriteMovies" | "watchedMovies";
+
+const isValidList = (listName: string): listName is MovieListName =>
+  ["watchlist", "favoriteMovies", "watchedMovies"].includes(listName);
+
 // Add a movie to a list
 export const addToMovieList = async (
   req: AuthRequest,
@@ -11,20 +16,17 @@ export const addToMovieList = async (
   const { listName, movieId } = req.body;
   const user = req.user;
 
-  if (
-    !user ||
-    !["watchlist", "favoriteMovies", "watchedMovies"].includes(listName)
-  ) {
+  if (!user || !isValidList(listName)) {
     res.status(400).json({ message: "Invalid request" });
     return;
   }
 
-  if ((user[listName as keyof typeof user] as string[]).includes(movieId)) {
+  if (user[listName].includes(movieId)) {
     res.status(400).json({ message: "Movie already in list" });
     return;
   }
 
-  (user[listName as keyof typeof user] as string[]).push(movieId);
+  user[listName].push(movieId);
   await user.save();
 
   res.status(200).json({ message: `Added to ${listName}` });
@@ -38,21 +40,15 @@ export const removeFromMovieList = async (
   const { listName, movieId } = req.body;
   const user = req.user;
 
-  if (
-    !user ||
-    !["watchlist", "favoriteMovies", "watchedMovies"].includes(listName)
-  ) {
+  if (!user || !isValidList(listName)) {
     res.status(400).json({ message: "Invalid request" });
     return;
   }
 
-  (user[listName as keyof typeof user] as string[]) = (
-    user[listName as keyof typeof user] as string[]
-  ).filter((id: string) => id !== movieId);
-
+  user[listName] = user[listName].filter((id: string) => id !== movieId);
   await user.save();
 
-  res.status(200).json({ message: `Added to ${listName}` });
+  res.status(200).json({ message: `Removed from ${listName}` });
 };
 
 // Get top 10 highest rated movies

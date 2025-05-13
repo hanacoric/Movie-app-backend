@@ -13,8 +13,16 @@ const router = express.Router();
 
 /**
  * @swagger
+ * tags:
+ *   name: Reviews
+ *   description: Manage movie reviews
+ */
+
+/**
+ * @swagger
  * /api/reviews:
  *   post:
+ *     tags: [Reviews]
  *     summary: Create a new review
  *     security:
  *       - bearerAuth: []
@@ -41,6 +49,8 @@ const router = express.Router();
  *     responses:
  *       201:
  *         description: Review created
+ *       403:
+ *         description: reCAPTCHA failed
  *       500:
  *         description: Server error
  */
@@ -50,9 +60,8 @@ router.post("/", protect, createReview);
  * @swagger
  * /api/reviews/user:
  *   get:
- *     summary: Get all reviews by the current logged-in user
- *     tags:
- *       - Reviews
+ *     tags: [Reviews]
+ *     summary: Get all reviews by the current user
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -63,24 +72,7 @@ router.post("/", protect, createReview);
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   _id:
- *                     type: string
- *                   title:
- *                     type: string
- *                   reviewText:
- *                     type: string
- *                   rating:
- *                     type: number
- *                   movieId:
- *                     type: string
- *                   userId:
- *                     type: string
- *                   createdAt:
- *                     type: string
- *                   updatedAt:
- *                     type: string
+ *                 $ref: '#/components/schemas/Review'
  *       401:
  *         description: Unauthorized
  *       500:
@@ -92,7 +84,8 @@ router.get("/user", protect, getAllReviewsByUser);
  * @swagger
  * /api/reviews/user/{movieId}:
  *   get:
- *     summary: Get a user's review for a movie
+ *     tags: [Reviews]
+ *     summary: Get the current user's review for a specific movie
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -101,9 +94,12 @@ router.get("/user", protect, getAllReviewsByUser);
  *         required: true
  *         schema:
  *           type: string
+ *         description: IMDb movie ID
  *     responses:
  *       200:
- *         description: User's review
+ *         description: User's review for the movie
+ *       401:
+ *         description: Unauthorized
  *       500:
  *         description: Server error
  */
@@ -113,6 +109,7 @@ router.get("/user/:movieId", protect, getUserReviewForMovie);
  * @swagger
  * /api/reviews/{movieId}:
  *   get:
+ *     tags: [Reviews]
  *     summary: Get all reviews for a movie
  *     parameters:
  *       - in: path
@@ -120,9 +117,10 @@ router.get("/user/:movieId", protect, getUserReviewForMovie);
  *         required: true
  *         schema:
  *           type: string
+ *         description: IMDb movie ID
  *     responses:
  *       200:
- *         description: List of reviews
+ *         description: List of reviews for the movie
  *       500:
  *         description: Server error
  */
@@ -132,6 +130,7 @@ router.get("/:movieId", getReviewsByMovie);
  * @swagger
  * /api/reviews/{id}:
  *   delete:
+ *     tags: [Reviews]
  *     summary: Delete a review
  *     security:
  *       - bearerAuth: []
@@ -141,6 +140,7 @@ router.get("/:movieId", getReviewsByMovie);
  *         required: true
  *         schema:
  *           type: string
+ *         description: Review ID
  *     responses:
  *       200:
  *         description: Review deleted
@@ -155,6 +155,7 @@ router.delete("/:id", protect, deleteReview);
  * @swagger
  * /api/reviews/{id}:
  *   put:
+ *     tags: [Reviews]
  *     summary: Update a review
  *     security:
  *       - bearerAuth: []
@@ -164,6 +165,7 @@ router.delete("/:id", protect, deleteReview);
  *         required: true
  *         schema:
  *           type: string
+ *         description: Review ID
  *     requestBody:
  *       required: true
  *       content:

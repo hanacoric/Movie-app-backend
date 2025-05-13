@@ -18,8 +18,8 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:5173", // Vite default dev server
-      "http://localhost:5175", // your custom port
+      "http://localhost:5173",
+      "http://localhost:5175",
       "https://movie-app-backend-ujpg.onrender.com", // Swagger or hosted calls
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],

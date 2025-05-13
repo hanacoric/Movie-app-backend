@@ -3,8 +3,8 @@ export interface IReview {
   title: string;
   reviewText: string;
   rating: number;
-  userId: mongoose.Types.ObjectId; // Referencing User model
-  movieId: string; // OMDb movie ID
+  userId: mongoose.Types.ObjectId;
+  movieId: string;
 }
 
 export interface IReviewDocument extends IReview, Document {}

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User, { IUserDocument } from "../models/User";
 
+//securing routes by verifying JSON web tokens
 export interface AuthRequest extends Request {
   user?: IUserDocument;
 }

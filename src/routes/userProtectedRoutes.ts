@@ -7,15 +7,33 @@ const router = express.Router();
 
 /**
  * @swagger
+ * tags:
+ *   name: Users
+ *   description: Authenticated user operations
+ */
+
+/**
+ * @swagger
  * /api/users/profile:
  *   get:
- *     summary: Get current user profile
  *     tags: [Users]
+ *     summary: Get current user profile
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: User profile data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 username:
+ *                   type: string
+ *                 email:
+ *                   type: string
  *       401:
  *         description: Unauthorized
  */
@@ -27,8 +45,8 @@ router.get("/profile", protect, (req: AuthRequest, res: Response) => {
  * @swagger
  * /api/users/lists:
  *   get:
- *     summary: Get all movie lists for the authenticated user
  *     tags: [Users]
+ *     summary: Get all movie lists for the authenticated user
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -42,15 +60,42 @@ router.get("/profile", protect, (req: AuthRequest, res: Response) => {
  *                 watchedMovies:
  *                   type: array
  *                   items:
- *                     type: string
+ *                     type: object
+ *                     properties:
+ *                       imdbID:
+ *                         type: string
+ *                       title:
+ *                         type: string
+ *                       year:
+ *                         type: string
+ *                       poster:
+ *                         type: string
  *                 watchlist:
  *                   type: array
  *                   items:
- *                     type: string
+ *                     type: object
+ *                     properties:
+ *                       imdbID:
+ *                         type: string
+ *                       title:
+ *                         type: string
+ *                       year:
+ *                         type: string
+ *                       poster:
+ *                         type: string
  *                 favoriteMovies:
  *                   type: array
  *                   items:
- *                     type: string
+ *                     type: object
+ *                     properties:
+ *                       imdbID:
+ *                         type: string
+ *                       title:
+ *                         type: string
+ *                       year:
+ *                         type: string
+ *                       poster:
+ *                         type: string
  *       401:
  *         description: Unauthorized, missing or invalid token
  */
