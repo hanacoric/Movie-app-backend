@@ -16,25 +16,24 @@ const router = express.Router();
  *   post:
  *     tags: [Users]
  *     summary: Register a new user
- *     description: Creates a new user account after verifying reCAPTCHA.
- *   requestBody:
-  required: true
-  content:
-    application/json:
-      schema:
-        type: object
-        required:
-          - username
-          - email
-          - password
-        properties:
-          username:
-            type: string
-          email:
-            type: string
-          password:
-            type: string
-
+ *     description: Creates a new user account.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - email
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
  *     responses:
  *       201:
  *         description: User successfully registered
@@ -53,7 +52,6 @@ const router = express.Router();
  *                   type: string
  *       400:
  *         description: User already exists
- *  
  *       500:
  *         description: Server error
  */
@@ -65,7 +63,7 @@ router.post("/register", registerUser);
  *   post:
  *     tags: [Users]
  *     summary: Authenticate user and get token
- *     description: Logs in a user using email, password, and reCAPTCHA.
+ *     description: Logs in a user using email and password.
  *     requestBody:
  *       required: true
  *       content:
@@ -75,13 +73,11 @@ router.post("/register", registerUser);
  *             required:
  *               - email
  *               - password
- *               - recaptchaToken
  *             properties:
  *               email:
  *                 type: string
  *               password:
  *                 type: string
- *
  *     responses:
  *       200:
  *         description: Login successful, returns user data and token
@@ -100,7 +96,6 @@ router.post("/register", registerUser);
  *                   type: string
  *       401:
  *         description: Invalid email or password
- *
  *       500:
  *         description: Server error
  */
