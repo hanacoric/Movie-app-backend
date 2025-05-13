@@ -17,26 +17,24 @@ const router = express.Router();
  *     tags: [Users]
  *     summary: Register a new user
  *     description: Creates a new user account after verifying reCAPTCHA.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - username
- *               - email
- *               - password
- *               - recaptchaToken
- *             properties:
- *               username:
- *                 type: string
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *               recaptchaToken:
- *                 type: string
+ *   requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - username
+          - email
+          - password
+        properties:
+          username:
+            type: string
+          email:
+            type: string
+          password:
+            type: string
+
  *     responses:
  *       201:
  *         description: User successfully registered
@@ -55,8 +53,7 @@ const router = express.Router();
  *                   type: string
  *       400:
  *         description: User already exists
- *       403:
- *         description: reCAPTCHA failed
+ *  
  *       500:
  *         description: Server error
  */
@@ -84,8 +81,7 @@ router.post("/register", registerUser);
  *                 type: string
  *               password:
  *                 type: string
- *               recaptchaToken:
- *                 type: string
+ *
  *     responses:
  *       200:
  *         description: Login successful, returns user data and token
@@ -104,8 +100,7 @@ router.post("/register", registerUser);
  *                   type: string
  *       401:
  *         description: Invalid email or password
- *       403:
- *         description: reCAPTCHA failed
+ *
  *       500:
  *         description: Server error
  */
