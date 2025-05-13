@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import Review from "../models/Review";
 import { AuthRequest } from "../middleware/authMiddleware";
+import Movie from "../models/Movie";
+import axios from "axios";
 
 // Create a new review
 export const createReview = async (
@@ -11,6 +13,35 @@ export const createReview = async (
   const userId = req.user?._id;
 
   try {
+    const existingMovie = await Movie.findOne({ imdbID: movieId });
+
+    if (!existingMovie) {
+      interface OmdbResponse {
+        Title: string;
+        Year: string;
+        Poster: string;
+        imdbID: string;
+        Response: string;
+        Error?: string;
+      }
+
+      const omdbResponse = await axios.get<OmdbResponse>(
+        `https://www.omdbapi.com/?i=${movieId}&apikey=${process.env.OMDB_API_KEY}`
+      );
+
+      const data = omdbResponse.data;
+
+      if (data.Response !== "False") {
+        await Movie.create({
+          title: data.Title,
+          year: data.Year,
+          poster: data.Poster,
+          imdbID: data.imdbID,
+        });
+      } else {
+        console.warn(`OMDb fetch failed for ID ${movieId}:`, data?.Error);
+      }
+    }
     const newReview = await Review.create({
       title,
       reviewText,
@@ -21,10 +52,10 @@ export const createReview = async (
 
     res.status(201).json(newReview);
   } catch (error) {
+    console.error("Error creating review:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
-
 // Get all reviews for a movie
 export const getReviewsByMovie = async (
   req: Request,

@@ -1,59 +1,31 @@
-import mongoose from "mongoose";
-
-//defines a movie with title, description, releaseYear, genre, director, cast, rating, reviews, poster
+import mongoose, { Document, Schema } from "mongoose";
 
 export interface IMovie {
+  imdbID: string;
   title: string;
-  description: string;
-  releaseYear: number;
-  genre: string[];
-  director: string;
-  cast: string[];
-  rating: number;
-  reviews: string[];
-  poster: Blob | string; // Blob is not directly supported in mongoose, so we use string for the poster URL
-  // poster: string; // Use string for the URL of the poster image
+  year: string;
+  poster: string;
 }
 
-export interface IMovieDocument extends IMovie, mongoose.Document {}
+export interface IMovieDocument extends IMovie, Document {}
 
-const movieSchema = new mongoose.Schema<IMovieDocument>(
+const movieSchema = new Schema<IMovieDocument>(
   {
-    title: {
+    imdbID: {
       type: String,
       required: true,
       unique: true,
     },
-    description: {
+    title: {
       type: String,
       required: true,
     },
-    releaseYear: {
-      type: Number,
-      required: true,
-    },
-    genre: {
-      type: [String],
-      required: true,
-    },
-    director: {
+    year: {
       type: String,
       required: true,
-    },
-    cast: {
-      type: [String],
-      required: true,
-    },
-    rating: {
-      type: Number,
-      default: 0,
-    },
-    reviews: {
-      type: [String],
-      default: [],
     },
     poster: {
-      type: String, // Use string for the URL of the poster image
+      type: String,
       required: true,
     },
   },
