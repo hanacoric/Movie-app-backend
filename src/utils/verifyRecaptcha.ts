@@ -1,12 +1,8 @@
 import axios from "axios";
 
 export const verifyRecaptcha = async (token: string): Promise<boolean> => {
-  // Bypass reCAPTCHA in development or test environments
-  if (
-    process.env.NODE_ENV === "development" ||
-    process.env.NODE_ENV === "test"
-  ) {
-    return true;
+  if (process.env.SKIP_RECAPTCHA === "true") {
+    return true; // Skip reCAPTCHA for testing environments (Swagger, dev...)
   }
 
   try {
