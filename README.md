@@ -40,7 +40,7 @@ npm install
 PORT=5000 <br>
 MONGO_URI=your_mongodb_connection_string <br>
 JWT_SECRET=your_jwt_secret <br>
-VITE_RECAPTCHA_SECRET_KEY=your_recaptcha_secret_key <br>
+RECAPTCHA_SECRET_KEY=your_recaptcha_secret_key <br>
 OMDB_API_KEY=your_omdb_api_key <br>
 SKIP_RECAPTCHA=true <br>
 
