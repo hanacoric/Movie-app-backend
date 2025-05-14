@@ -10,7 +10,7 @@ const options: swaggerJSDoc.Options = {
     },
     servers: [
       {
-        url: "http://localhost:5000",
+        url: "https://movie-app-backend-ujpg.onrender.com/api",
       },
     ],
     components: {
