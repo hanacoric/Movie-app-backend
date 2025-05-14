@@ -8,7 +8,6 @@ export interface IUser {
   watchedMovies: string[];
   watchlist: string[];
   favoriteMovies: string[];
-  isAdmin: boolean;
 }
 
 export interface IUserDocument extends IUser, Document {}
@@ -37,10 +36,6 @@ const userSchema = new mongoose.Schema<IUserDocument>(
     },
     favoriteMovies: {
       type: [String],
-    },
-    isAdmin: {
-      type: Boolean,
-      default: false,
     },
   },
   {
