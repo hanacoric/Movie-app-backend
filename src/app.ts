@@ -20,11 +20,11 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:5175",
-      "https://movie-app-backend-ujpg.onrender.com", // Swagger or hosted calls
-      "https://movielog-delta.vercel.app", // Frontend domain
+      "https://movielog-delta.vercel.app", // frontend domain
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 
